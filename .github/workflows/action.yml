@@ -1,1 +1,74 @@
+name: DEV Deployment
 
+on:
+  push:
+    paths:
+      - 'src/public/**'
+    branches:
+    - 'development'
+
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checking out the repo
+      uses: actions/checkout@v2
+
+    - name: Install composer      
+      env:
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+      run: |
+        pwd
+        mkdir ~/.ssh
+        echo -e "${SSH_KEY}" >~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        cd ./src/public && composer install
+    
+    - name: Building PM Docker Image
+      uses: pmagentur/pm_docker_builder@v0.2
+      env:
+        USERNAME: ${{ secrets.Docker_user }}
+        PASSWORD: ${{ secrets.Docker_pass }}
+        REGISTRY: docker.dev01.pmagentur.com
+        REPOSITORY: ${{ secrets.DOCKER_REPOSITORY }}
+        TAG: 'dev' 
+        DOCKERFILE_PATH: 'src/.'
+        CREATE_BACKUP: 'True'
+
+
+  failure:
+    needs: [build]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Slack notifying on error
+      uses: pmagentur/pm_slack_notifier@v0.2
+      env:
+        SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+        SLACK_COLOR: '#FF0000'
+        SLACK_ICON: https://avatars1.githubusercontent.com/u/63812035?s=200&v=4
+        SLACK_MESSAGE: 'Deployment failed :x:'
+        SLACK_TITLE: 'Deployment to DEV'
+        SLACK_USERNAME: "PM's whisperer"
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+  successed:
+    needs: [build]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Slack notifying on success
+      uses: pmagentur/pm_slack_notifier@v0.2
+      env:
+        SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+        SLACK_COLOR: '#006400'
+        SLACK_ICON: https://avatars1.githubusercontent.com/u/63812035?s=200&v=4
+        SLACK_MESSAGE: 'Successfully deployed :white_check_mark:'
+        SLACK_TITLE: 'Deployment to DEV'
+        SLACK_USERNAME: "PM's whisperer"
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} 
