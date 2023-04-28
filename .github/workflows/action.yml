@@ -30,7 +30,7 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         cd ./src/public && composer install
     
-    - name: Building PM Docker Image
+    - name: Build PM Docker Image
       uses: pmagentur/pm_docker_builder@v0.2
       env:
         USERNAME: ${{ secrets.Docker_user }}
