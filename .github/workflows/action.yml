@@ -27,7 +27,7 @@ jobs:
         SLACK_MESSAGE: 'Deployment to DEV is started'
         SLACK_TITLE: 'Deployment to DEV'
         SLACK_USERNAME: "PM's whisperer"
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
     
     - name: Checking out the repo
       uses: actions/checkout@v2
@@ -68,7 +68,7 @@ jobs:
         SLACK_MESSAGE: 'Deployment failed :x:'
         SLACK_TITLE: 'Deployment to DEV'
         SLACK_USERNAME: "PM's whisperer"
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+       # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
   successed:
     needs: [build]
     if: success()
@@ -83,4 +83,4 @@ jobs:
         SLACK_MESSAGE: 'Successfully deployed :white_check_mark:'
         SLACK_TITLE: 'Deployment to DEV'
         SLACK_USERNAME: "PM's whisperer"
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} 
+       # SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} 
