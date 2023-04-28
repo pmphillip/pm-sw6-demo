@@ -1,0 +1,258 @@
+{% block sw_search_bar_item %}
+<!-- eslint-disable-next-line vuejs-accessibility/mouse-events-have-key-events -->
+<li
+    class="sw-search-bar-item"
+    :class="componentClasses"
+    @mouseenter="onMouseEnter($event)"
+>
+
+    {% block sw_search_bar_item_icon %}
+    <sw-icon
+        v-if="iconName && feature.isActive('FEATURE_NEXT_6040')"
+        :name="iconName"
+        :color="iconColor"
+    />
+    {% endblock %}
+
+    {% block sw_search_bar_item_customer %}
+    <router-link
+        v-if="type === 'customer'"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="{ name: 'sw.customer.detail.base', params: { id: item.id } }"
+    >
+        {% block sw_search_bar_item_customer_label %}
+        <span
+            v-if="!feature.isActive('FEATURE_NEXT_6040')"
+            class="sw-search-bar-item__label"
+        >
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="`${item.customerNumber} - ${item.firstName} ${item.lastName}`"
+            />
+        </span>
+
+        <span
+            v-if="feature.isActive('FEATURE_NEXT_6040')"
+            class="sw-search-bar-item__label"
+        >
+            {% block sw_search_bar_item_customer_label_name %}
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="`${item.firstName} ${item.lastName}`"
+            />
+            {% endblock %}
+
+            {% block sw_search_bar_item_customer_label_number %}
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="item.customerNumber"
+            />
+            {% endblock %}
+        </span>
+        {% endblock %}
+
+    </router-link>
+    {% endblock %}
+
+    {% block sw_search_bar_item_product %}
+    <router-link
+        v-else-if="type === 'product'"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="{ name: 'sw.product.detail.base', params: { id: item.id } }"
+    >
+
+        {% block sw_search_bar_item_product_label %}
+        <span
+            v-if="!feature.isActive('FEATURE_NEXT_6040')"
+            class="sw-search-bar-item__label"
+        >
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="`${item.productNumber} - ${item.name}`"
+            />
+        </span>
+
+        <span
+            v-if="feature.isActive('FEATURE_NEXT_6040')"
+            class="sw-search-bar-item__label"
+        >
+            {% block sw_search_bar_item_product_label_name %}
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="productDisplayName"
+            />
+            {% endblock %}
+
+            {% block sw_search_bar_item_product_label_number %}
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="item.productNumber"
+            />
+            {% endblock %}
+        </span>
+        {% endblock %}
+
+    </router-link>
+    {% endblock %}
+
+    {% block sw_search_bar_item_category %}
+    <router-link
+        v-else-if="type === 'category'"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="{ name: 'sw.category.detail', params: { id: item.id } }"
+    >
+
+        {% block sw_search_bar_item_category_label %}
+        <span class="sw-search-bar-item__label">
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="item.name"
+            />
+        </span>
+        {% endblock %}
+
+    </router-link>
+    {% endblock %}
+
+    {% block sw_search_bar_item_order %}
+    <router-link
+        v-else-if="type === 'order'"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="{ name: 'sw.order.detail', params: { id: item.id } }"
+    >
+
+        {% block sw_search_bar_item_order_label %}
+        <span
+            v-if="!feature.isActive('FEATURE_NEXT_6040')"
+            class="sw-search-bar-item__label"
+        >
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="`${item.orderNumber} - ${item.orderCustomer.firstName} ${item.orderCustomer.lastName}`"
+            />
+        </span>
+
+        <span
+            v-if="feature.isActive('FEATURE_NEXT_6040')"
+            class="sw-search-bar-item__label"
+        >
+            {% block sw_search_bar_item_order_label_name %}
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="`${item.orderCustomer.firstName} ${item.orderCustomer.lastName}`"
+            />
+            {% endblock %}
+
+            {% block sw_search_bar_item_order_label_number %}
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="item.orderNumber"
+            />
+            {% endblock %}
+        </span>
+        {% endblock %}
+
+    </router-link>
+    {% endblock %}
+
+    {% block sw_search_bar_item_media %}
+    <router-link
+        v-else-if="type === 'media'"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="{ name: 'sw.media.index', params: { folderId: item.mediaFolderId }, query: { term: item.fileName } }"
+    >
+
+        {% block sw_search_bar_item_media_label %}
+        <span class="sw-search-bar-item__label">
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="item | mediaName"
+            />
+        </span>
+        {% endblock %}
+
+    </router-link>
+    {% endblock %}
+
+    {% block sw_search_bar_item_cms_page %}
+    <router-link
+        v-else-if="type === 'cms_page'"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="{ name: 'sw.cms.detail.base', params: { id: item.id } }"
+    >
+
+        {% block sw_search_bar_item_cms_page_label %}
+        <span class="sw-search-bar-item__label">
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="item.name"
+            />
+        </span>
+        {% endblock %}
+
+    </router-link>
+    {% endblock %}
+
+    {% block sw_search_bar_item_landing_page %}
+    <router-link
+        v-else-if="type === 'landing_page'"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="{ name: 'sw.category.landingPageDetail.base', params: { id: item.id } }"
+    >
+
+        {% block sw_search_bar_item_cms_landing_page_label %}
+        <span class="sw-search-bar-item__label">
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="item.name"
+            />
+        </span>
+        {% endblock %}
+
+    </router-link>
+    {% endblock %}
+
+    {% block sw_search_bar_item_module %}
+    <router-link
+        v-else-if="type === 'module' && feature.isActive('FEATURE_NEXT_6040')"
+        ref="routerLink"
+        class="sw-search-bar-item__link"
+        :to="routeName"
+    >
+        {% block sw_search_bar_item_module_label %}
+        <span
+            class="sw-search-bar-item__label"
+        >
+            {% block sw_search_bar_item_module_label_module %}
+            <sw-highlight-text
+                :search-term="searchTerm"
+                :text="moduleName"
+            />
+            {% endblock %}
+
+            {% block sw_search_bar_item_module_label_shortcut %}
+            <sw-shortcut-overview-item
+                v-if="shortcut"
+                title=""
+                :content="shortcut"
+            />
+            {% endblock %}
+
+            {% block sw_search_bar_item_module_label_action %}
+            <sw-highlight-text
+                :text="$tc(`global.sw-search-bar-item.${item && item.action ? 'typeLabelAction' : 'typeLabelModule' }`)"
+            />
+            {% endblock %}
+        </span>
+        {% endblock %}
+    </router-link>
+    {% endblock %}
+</li>
+{% endblock %}

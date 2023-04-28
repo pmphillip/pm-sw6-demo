@@ -1,0 +1,28 @@
+beforeCreate:
+  - docker-compose up -d
+
+afterPause:
+  - docker-compose stop
+
+beforeResume:
+  - docker-compose up -d
+
+afterTerminate:
+  - docker-compose down
+
+sync:
+  defaults:
+    flushOnCreate: true
+    mode: "two-way-resolved"
+    permissions:
+      defaultFileMode: 644
+      defaultDirectoryMode: 755
+    ignore:
+      vcs: true
+      paths:
+        - ".docker"
+        - ".github"
+
+  schneider-de-shop:
+    alpha: "docker://www-data@sw6-shop/var/www/html"
+    beta: "./public"

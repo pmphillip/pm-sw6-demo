@@ -1,0 +1,108 @@
+### System Files ###
+.DS_Store
+
+# Optional npm cache directory
+.npm
+
+# Dependency directories
+/node_modules
+/bower_components
+
+# Optional eslint cache
+.eslintcache
+
+# workspace files are user-specific
+*.sublime-workspace
+
+### WebStorm/IntelliJ ###
+/.idea
+modules.xml
+*.ipr
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.TemporaryItems
+.Trashes
+
+# Ignore target java file
+/src/tests/target
+/src/tests/target/*
+
+# Remove Cashes #
+/src/public/var/cache/*
+!/src/public/var/cache/clear_cache.sh
+/src/public/web/cache/*
+!/src/public/web/cache/.gitkeep
+
+# Remove Logs #
+/src/public/var/log/*
+!/src/public/var/log/.htaccess
+
+# dont put media in git 
+/src/public/media/*
+!/src/public/media/.htaccess
+!/src/public/media/archive/.gitkeep
+!/src/public/media/image/.gitkeep
+!/src/public/media/music/.gitkeep
+!/src/public/media/pdf/.gitkeep
+!/src/public/media/temp/.gitkeep
+!/src/public/media/unknown/.gitkeep
+!/src/public/media/vector/.gitkeep
+!/src/public/media/video/.gitkeep
+
+# dont put node-modules in git 
+src/scripts/node_modules/*
+#package-lock.json
+
+# pm
+src/scripts/automatic-dump-for-local.sql
+src/scripts/automatic-dump-for-local.sql.bak
+src/scripts/backup.sql
+src/xdebug/xdebug/*
+error.log
+/src/public/media/temp/*
+!/src/public/media/temp/.htaccess
+junit.xml
+src/public/.idea
+/src/data
+/src/public/files/plugins
+/src/db
+
+index.nginx-debian.html
+mutagen.yml.lock
+/src/public/custom/project/PmTest/*
+
+#composer files
+/src/vendor/*
+/src/public/vendorPM
+/src/public/custom/plugins/PmAbstract/*
+/src/public/custom/plugins/PmLogging/*
+/src/public/custom/plugins/PmSoap/*
+/src/public/custom/plugins/PmTaxChange/*
+/src/public/custom/plugins/PmImporter/*
+/src/public/custom/plugins/PmEmotionBenefit/*
+/src/public/custom/project/PmImporterSap/*
+/src/public/custom/plugins/PmPimImporter/*
+/src/public/custom/plugins/PmCloudinary/*
+/src/public/custom/plugins/PmPerformance/*
+/src/public/custom/plugins/PmMediaHelper/*
+gitHooks.log
+/src/public/custom/plugins/PmMediaHelper/
+
+src/jmeter/scripts/jmeter.log
+
+src/apache-jmeter-5.4/bin/jmeter.log
+
+src/apache-jmeter-5.4/backups/
+
+src/public/themes/node_modules/
+
+client.ovpn
+/src/public/web/sitemap/shop-1/
+/src/public/web/sitemap/shop-3/
+/src/public/web/sitemap/shop-4/
+src/public/install.lock
+src/public/.env
+src/public/var/theme-variables.scss

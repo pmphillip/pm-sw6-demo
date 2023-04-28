@@ -1,0 +1,29 @@
+{% block component_head_analytics %}
+    {% set googleAnalyticsIsAllowed = (app.request.cookies.get('google-analytics-enabled') is same as ('1')) %}
+
+    {% if context.salesChannel.analytics and context.salesChannel.analytics.isActive() and googleAnalyticsIsAllowed %}
+        {% set trackingId = context.salesChannel.analytics.getTrackingId() %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ trackingId }}"></script>
+        <script>
+            window.gtagActive = true;
+            window.controllerName = '{{ controllerName|lower }}';
+            window.actionName = '{{ controllerAction|lower }}';
+            window.dataLayer = window.dataLayer || [];
+            window.trackOrders = '{{ context.salesChannel.analytics.isTrackOrders() }}';
+
+            function gtag() { dataLayer.push(arguments); }
+
+            {% block component_head_analytics_tag_config %}
+                window.gtagCallback = function gtagCallbackFunction() {
+                    gtag('js', new Date());
+
+                    gtag('config', '{{ trackingId }}', {
+                        'anonymize_ip': '{{ context.salesChannel.analytics.isAnonymizeIp() }}',
+                        'cookie_domain': 'none',
+                        'cookie_prefix': '_swag_ga',
+                    });
+                };
+            {% endblock %}
+        </script>
+    {% endif %}
+{% endblock %}

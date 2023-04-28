@@ -1,0 +1,92 @@
+version: '3.7'
+
+networks:
+  backend:
+
+volumes:
+  db_data:
+    name: ${PROJECT_NAME}-db
+  es_data:
+    name: ${PROJECT_NAME}-es
+    driver: local
+
+services:
+  web:
+    image: pmphillip/pm-shopware6-php-nginx:php-7.4
+    container_name: "${PROJECT_NAME}-shop"
+    hostname: "${PROJECT_NAME}"
+    working_dir: /var/www/html
+    expose:
+      - 80
+    ports:
+      - "80:80"
+    volumes:
+      - ./configs/nginx.conf:/etc/nginx/nginx.conf
+      - ./configs/default.conf:/etc/nginx/sites-enabled/default.conf
+      - ./public:/var/www/html             # Remove or comment for mutagen
+      #- ./public/media:/var/www/html/media:delegated # needed for mutagen setup
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE_LOCAL}
+      MYSQL_USER: ${MYSQL_USER_LOCAL}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD_LOCAL}
+      MYSQL_HOST: ${COMPOSE_PROJECT_NAME}-mysql
+      ES_HOST: ${ES_HOST}
+      SHOPWARE_ENV: ${SHOPWARE_ENV}
+      VIRTUAL_HOST: ${SHOP_URL_LOCAL}
+    networks:
+      - backend
+
+  mysql:
+    image: mariadb:10.7
+    container_name: "${PROJECT_NAME}-mysql"
+    expose:
+      - 3306
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=v399efJP
+      - MYSQL_DATABASE=${MYSQL_DATABASE_LOCAL}
+      - MYSQL_USER=${MYSQL_USER_LOCAL}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD_LOCAL}
+    networks:
+      - backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: "${PROJECT_NAME}-phpmyadmin"
+    environment:
+      PMA_HOSTS: mysql
+      PMA_USER: root
+      PMA_PASSWORD: v399efJP
+      TZ: "Europe/Berlin"
+      VIRTUAL_HOST: phpmyadmin.${SHOP_URL_LOCAL}
+    expose:
+      - 80
+    ports:
+      - "8083:80"
+    networks:
+      - backend
+
+  elasticsearch:
+    image: elastic/elasticsearch:7.16.2
+    container_name: "${PROJECT_NAME}-es"
+    networks:
+      - backend
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+      - ./configs/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
+      - 9300:9300
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
