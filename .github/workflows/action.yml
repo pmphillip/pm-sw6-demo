@@ -40,19 +40,3 @@ jobs:
         TAG: 'dev' 
         DOCKERFILE_PATH: 'src/.'
         CREATE_BACKUP: 'True'
-
-  successed:
-    needs: [build]
-    if: success()
-    runs-on: ubuntu-latest
-    steps:
-    - name: Slack notifying on success
-      uses: pmagentur/pm_slack_notifier@v0.2
-      env:
-        SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-        SLACK_COLOR: '#006400'
-        SLACK_ICON: https://avatars1.githubusercontent.com/u/63812035?s=200&v=4
-        SLACK_MESSAGE: 'Successfully deployed :white_check_mark:'
-        SLACK_TITLE: 'Deployment to DEV'
-        SLACK_USERNAME: "PM's whisperer"
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} 
