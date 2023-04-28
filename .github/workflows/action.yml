@@ -6,7 +6,7 @@ on:
     paths:
       - 'src/public/**'
     branches:
-    - 'development'
+    - 'main'
 
   workflow_dispatch:
 
