@@ -18,16 +18,16 @@ jobs:
 
     steps:
 
-   # - name: Notifying on start
-      uses: pmagentur/pm_slack_notifier@v0.2
-      env:
-        SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
-        SLACK_COLOR: '#FFA500'
-        SLACK_ICON: https://avatars1.githubusercontent.com/u/63812035?s=200&v=4
-        SLACK_MESSAGE: 'Deployment to DEV is started'
-        SLACK_TITLE: 'Deployment to DEV'
-        SLACK_USERNAME: "PM's whisperer"
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} #
+   #  - name: Notifying on start
+   #   uses: pmagentur/pm_slack_notifier@v0.2
+   #   env:
+   #     SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+   #     SLACK_COLOR: '#FFA500'
+   #     SLACK_ICON: https://avatars1.githubusercontent.com/u/63812035?s=200&v=4
+   #     SLACK_MESSAGE: 'Deployment to DEV is started'
+   #     SLACK_TITLE: 'Deployment to DEV'
+   #     SLACK_USERNAME: "PM's whisperer"
+   #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }} #
     
     - name: Checking out the repo
       uses: actions/checkout@v2
